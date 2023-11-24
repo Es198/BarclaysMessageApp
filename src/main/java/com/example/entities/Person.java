@@ -3,32 +3,53 @@ package com.example.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
+import java.util.List;
 
-@SuppressWarnings("unused")
 @Entity
 public class Person {
 
     @Id
-    @GeneratedValue(generator = "person_sequence")
-    @SequenceGenerator(name="person_sequence", initialValue = 1)
-    private Long id;
-    public Long getId() {return id;}
-
+    @GeneratedValue
+    public Long id;
+    private  String email;
     private String name;
-    public String getName() {return name;}
-    public void setName(String name) {this.name = name;}
 
-    private String email;
+    @OneToMany(mappedBy =  "sender")
+    private List<Message> sentMessages=new ArrayList<>();
 
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
+    public String getEmail() {
+        return email;
+    }
 
-    public Person()  {}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Person(String name, String email) {
         this.name = name;
-        this.email = email;
+        this.email=email;
+
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Person(){}
+
+
+
+
+
 }

@@ -1,14 +1,14 @@
 package com.example.entities;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
-import jakarta.persistence.*;
-
-@SuppressWarnings("unused")
 @Entity
 public class Message {
 
     @Id
-    @GeneratedValue(generator = "message_sequence")
-    @SequenceGenerator(name="message_sequence", initialValue = 1)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
@@ -16,15 +16,18 @@ public class Message {
 
     private String content;
 
-    public Person getSender() {
-        return sender;
-    }
-
     public Message() {}
-    public Message(String content) {this.content = content;}
+
+    public Message(String content){
+        this.content=content;}
+
     public Message(String content, Person sender) {
         this.content = content;
-        this.sender = sender;
+        this.sender=sender;
+    }
+
+    public Person getSender() {
+        return sender;
     }
 
     public String getContent() {

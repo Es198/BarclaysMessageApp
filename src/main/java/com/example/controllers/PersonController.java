@@ -9,9 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/persons")
 public class PersonController {
 
     PersonService personService;
@@ -25,7 +23,6 @@ public class PersonController {
     @ResponseStatus(HttpStatus.CREATED)
     public Person addPerson(@RequestBody Person person) {
         Person newPerson;
-
         try {
             newPerson = this.personService.addPerson(person);
         } catch (IllegalArgumentException e) {
@@ -34,8 +31,22 @@ public class PersonController {
         return newPerson;
     }
 
-    @GetMapping
-    public List<Person> getAllPersons() {
+
+
+    @GetMapping("/persons")
+    public Iterable<Person> findAll() {
         return personService.findAll();
     }
+
+    //Extending the task to get the person by ID
+    @GetMapping("/persons/{personId}")
+    public Person getPersonById(@PathVariable long personId) {
+        Person person = personService.getPersonById(personId);
+        if(person == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Person not found");
+        return  person;
+    }
+
 }
+
+

@@ -13,24 +13,23 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-@SuppressWarnings("resource")
-public class MessageWithRealHttpRequestTest {
+public class MessageWithRealHTTPRequestTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Disabled("Must be run while application is running.")
+
+    @Disabled
     @Test
+
     public void testGettingAllMessages() throws IOException {
         HttpUriRequest request = new HttpGet("http://localhost:8080/messages");
         HttpResponse response = HttpClientBuilder.create().build().execute(request);
-
         Message[] messages = mapper.readValue(response.getEntity().getContent(), Message[].class);
+        assertEquals("hey", messages[0].getContent());
+        assertEquals("hey", messages[1].getContent());
+        assertEquals("hey", messages[2].getContent());
+        assertEquals("hey", messages[3].getContent());
 
-        assertEquals("First test message", messages[0].getContent());
-        assertEquals("Second test message", messages[1].getContent());
-        assertEquals("Third test message", messages[2].getContent());
-        assertEquals("Fourth test message", messages[3].getContent());
     }
 
     @Test
@@ -43,3 +42,5 @@ public class MessageWithRealHttpRequestTest {
         System.out.println(messageId);
     }
 }
+
+

@@ -3,35 +3,39 @@ package com.example.dataaccess;
 import com.example.entities.Message;
 import com.example.entities.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Populator {
 
-    MessageRepository messageRepository;
-    PersonRepository personRepository;
+    MessageRepo repo;
+    PersonRepo personRepo;
 
     @Autowired
-    public Populator(MessageRepository messageRepository, PersonRepository personRepository) {
-        this.messageRepository = messageRepository;
-        this.personRepository = personRepository;
+    public Populator(MessageRepo repo, PersonRepo personRepo) {
+        this.repo = repo;
+        this.personRepo = personRepo;
     }
 
-//    @EventListener(ContextRefreshedEvent.class)
-    public void populate() {
-        Person bill = new Person("Bill", "bill@iscooler.com");
-        bill = personRepository.save(bill);
+    //@EventListener(ContextRefreshedEvent.class)
 
-        Person dave = new Person("Dave", "dave@dave.com");
-        personRepository.save(dave);
+    public void populateMessages() {
 
-        Person futureDave = new Person("Dave", "dave@dave.com");
-        personRepository.save(futureDave);
+        Person esra = new Person("esra","esra@email.com");
+        esra=personRepo.save(esra);
 
-        Message message = new Message("This is a message", bill);
-        this.messageRepository.save(message);
+        Person sara = new Person("sara","sara@email.com");
+        sara=personRepo.save(sara);
 
-        message = new Message("I love Java!!! (Coffee, not the language)", bill);
-        this.messageRepository.save(message);
+        Message message = new Message("This is a message",esra);
+        this.repo.save(message);
+
+        message = new Message("I love Java!!! (Coffee, not the language)",esra);
+        this.repo.save(message);
     }
+
 }
+
+

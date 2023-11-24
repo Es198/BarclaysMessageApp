@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 @Repository
-public interface MessageRepository extends ListCrudRepository<Message, Long> {
+//what we take in (messages and the key which is of type Long)
+public interface MessageRepo extends ListCrudRepository<Message,Long>{
     List<Message> findMessagesBySenderEmail(String email);
-    List<Message> findMessagesBySenderName(String name);
+
 }
