@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'maven:3.9.5-eclipse-temurin-17-alpine'
+            args '-v /root/.m2:/root/.m2'
+        }
+    }
     options {
         skipStagesAfterUnstable()
     }
@@ -11,29 +16,30 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'mvn test -f pom.xml'
+                sh 'mvn test'
             }
-        }
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    withSonarQubeEnv('sonarqube') {
-                        sh 'mvn sonar:sonar -Pcoverage'
-                    }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
                 }
             }
         }
-//        stage("Quality Gate") {
-//            steps {
-//              timeout(time: 5, unit: 'MINUTES') {
-//                waitForQualityGate abortPipeline: true
-//              }
-//            }
-//          }
+
+        stage('SonarQube Analysis') {
+                    steps {
+                        script {
+                            withSonarQubeEnv('sonarqube') {
+        //                        sh "${tool('sonar-scanner')}/bin/sonar-scanner -Dsonar.projectKey=myProjectKey -Dsonar.projectName=myProjectName"
+                                sh 'mvn clean package sonar:sonar'
+                            }
+                        }
+                    }
+                }
+
         stage('Deploy') {
             steps {
-                echo "[INFO] DEPLOYMENT SUCCESS!!!"
-                //sh './jenkins/scripts/deploy.sh'
+                sh './jenkins/scripts/deliver.sh'
+                echo "deploy successful!"
             }
         }
     }
